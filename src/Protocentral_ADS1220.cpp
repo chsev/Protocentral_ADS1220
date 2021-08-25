@@ -22,7 +22,7 @@
 #include <Arduino.h>
 #include "Protocentral_ADS1220.h"
 #include <SPI.h>
-#include <limits>
+//#include <limits>
 
 //#define BOARD_SENSYTHING ST_1_3
 
@@ -244,7 +244,7 @@ int32_t Protocentral_ADS1220::DataToInt(){
 int32_t Protocentral_ADS1220::Read_WaitForData()
 {
     if(!WaitForData(60)){
-        return std::numeric_limits<int32_t>::min();
+        return 0;
     }
     Read_Data();
     return DataToInt();
@@ -262,9 +262,6 @@ int32_t Protocentral_ADS1220::Read_SingleShot_SingleEnded_WaitForData(uint8_t ch
     return Read_SingleShot_WaitForData();
 }
 
-#define VREF_MASK ((1 << 6) | (1<<7))
-#define VREF_INT (0 << 6)
-#define VREF_EXT (1 << 6)
 
 void Protocentral_ADS1220::internal_reference(){
     m_config_reg2 &= ~VREF_MASK;
@@ -272,8 +269,8 @@ void Protocentral_ADS1220::internal_reference(){
     writeRegister(CONFIG_REG2_ADDRESS,m_config_reg2);
 }
 
-void Protocentral_ADS1220::external_reference(){
+void Protocentral_ADS1220::external_reference(int vref_ext){
     m_config_reg2 &= ~VREF_MASK;
-    m_config_reg2 |= VREF_EXT;
+    m_config_reg2 |= vref_ext;
     writeRegister(CONFIG_REG2_ADDRESS,m_config_reg2);
 }

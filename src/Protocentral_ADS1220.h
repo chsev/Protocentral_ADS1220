@@ -78,6 +78,11 @@
 #define MUX_SE_CH2      0xA0
 #define MUX_SE_CH3      0xB0
 
+#define VREF_MASK ((1 << 6) | (1<<7))
+#define VREF_INT (0 << 6)
+#define VREF_EXT_REFP0_REFN0 (1 << 6)
+#define VREF_EXT_REFP1_REFN1 (1 << 7) 
+#define VREF_EXT_AVDD_AVSS ((1 << 6) | (1<<7))
 
 class Protocentral_ADS1220
 {
@@ -130,5 +135,5 @@ private:
       int32_t Read_SingleShot_SingleEnded_WaitForData(uint8_t channel_no);
 
       void internal_reference();
-      void external_reference();
+      void external_reference(int vref_ext);
 };
