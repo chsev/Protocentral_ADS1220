@@ -105,7 +105,7 @@ private:
       uint8_t NewDataAvailable;
 
       Protocentral_ADS1220();
-      void begin(uint8_t cs_pin, uint8_t drdy_pin);
+      bool begin(uint8_t cs_pin, uint8_t drdy_pin);
 
       void PrintRegisterValues();
 

@@ -68,8 +68,9 @@ uint8_t Protocentral_ADS1220::readRegister(uint8_t address)
     return data;
 }
 
-void Protocentral_ADS1220::begin(uint8_t cs_pin, uint8_t drdy_pin)
+bool Protocentral_ADS1220::begin(uint8_t cs_pin, uint8_t drdy_pin)
 {
+    bool adcFound = true;
     m_drdy_pin=drdy_pin;
     m_cs_pin=cs_pin;
 
@@ -89,8 +90,9 @@ void Protocentral_ADS1220::begin(uint8_t cs_pin, uint8_t drdy_pin)
     delayMicroseconds(50);
     
     // The device pulls nDRDY low after it is initialized
-    if(!WaitForData(1)){
+    if(!WaitForData(60)){
         // TODO: Handle the timeout
+        adcFound = false;
     }
 
     m_config_reg0 = 0x00;   //Default settings: AINP=AIN0, AINN=AIN1, Gain 1, PGA enabled
@@ -102,6 +104,7 @@ void Protocentral_ADS1220::begin(uint8_t cs_pin, uint8_t drdy_pin)
     writeRegister( CONFIG_REG1_ADDRESS , m_config_reg1);
     writeRegister( CONFIG_REG2_ADDRESS , m_config_reg2);
     writeRegister( CONFIG_REG3_ADDRESS , m_config_reg3);
+    return adcFound;
 }
 
 void Protocentral_ADS1220::PrintRegisterValues(){
